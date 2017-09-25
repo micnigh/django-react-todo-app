@@ -1,4 +1,4 @@
-Sample of django as an api server with JWT token auth and a create-react-app of todo-mvc
+Sample of django as an api server with JWT token auth and a create-react-app of the ever popular todo app
 
 # Requirements
 
