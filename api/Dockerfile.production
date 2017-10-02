@@ -1,0 +1,22 @@
+FROM python:3.6
+
+WORKDIR /django/
+
+COPY requirements.txt /django/
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir gunicorn
+
+EXPOSE 8000
+
+COPY ./ /django/
+COPY docker/django/container/ /
+RUN chmod +x /scripts/*.sh
+
+# unbuffer python stdio so it shows up in docker logs
+ENV PYTHONUNBUFFERED TRUE
+
+# build static assets
+RUN python manage.py collectstatic
+
+ENTRYPOINT ["/scripts/entrypoint.sh"]
+CMD gunicorn --enable-stdio-inheritance --bind 0.0.0.0:8000 project.wsgi

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const logo = require('./logo.svg');
 
-const API_URL = `http://localhost:8000/`;
+const API_URL = `http://localhost:81/django/`;
 
 class App extends React.Component {
 
@@ -22,7 +22,7 @@ class App extends React.Component {
   async loadData() {
     const { data: { token }} = await axios.post(`${API_URL}api-token-auth/`, {
       username: `admin`,
-      password: `adminadmin`,
+      password: `admin`,
     });
     const todos = (await axios.get(`${API_URL}todos/`, {
       headers: {

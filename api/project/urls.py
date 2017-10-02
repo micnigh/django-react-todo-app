@@ -17,8 +17,17 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+from .settings.base import BASE_URL
 
-urlpatterns = [
+# fix site url for admins
+admin.site.site_url = f'/{BASE_URL}'
+
+appUrlPatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('api.urls')),
+]
+
+# serve app urls under baseUrl
+urlpatterns = [
+    url(r'^{0}'.format(BASE_URL), include(appUrlPatterns))
 ]

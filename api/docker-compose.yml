@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    networks:
+      - front
+      - application-backend
+    healthcheck:
+      test: "curl -f http://localhost:8000/django/admin/ || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 36
+    environment:
+      BASE_URL: django/
+      DJANGO_SETTINGS_MODULE: project.settings.development
+    env_file:
+      - config/db.development.env
+    labels:
+      - "traefik.frontend.rule=PathPrefix:/django/"
+      - "traefik.docker.network=traefik_front"
+    ports:
+      - 8000:8000
+
+  # db:
+  #   image: postgres:9
+  #   env_file:
+  #     - config/db.development.env
+  #   networks:
+  #     - application-backend
+  #   volumes:
+  #     - postgres:/var/lib/postgresql/data/
+  #   healthcheck:
+  #     test: "pg_isready --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB"
+  #   ports:
+  #     - 5432:5432
+
+networks:
+  application-backend:
+    driver: bridge
+  front:
+    external:
+      name: traefik_front
+
+volumes:
+  postgres:

@@ -1,0 +1,6 @@
+__pycache__
+.*/
+*.log
+*.bak
+*.sqlite*
+config/*.production.env
